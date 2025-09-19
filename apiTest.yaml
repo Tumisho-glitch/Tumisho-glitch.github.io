@@ -1,0 +1,206 @@
+openapi: 3.0.3
+x-Dev-lifecuycle:
+  last-updated: today
+info:
+  title: "SnapTrack Documentation"
+  description: |
+    # About us
+    **Practice** **Eazy shop** is a website that I use to practice openAPI specification
+    You will get `Affiliate commission` for selling their products
+    ## The following categories are supported
+    - Mobile
+    - Web
+  #summary: "This is a practice document for learning openAPI. I am practicing openAPI. "
+  termsOfService: https://terms.google.com
+  contact:
+    name : Tumisho
+    url: https://tumisho.google.com
+    email: contact@gmail.com
+  license:
+    name: EazyShop license
+    url: https://license.google.com
+  x-custom-info:
+    comment: some comments
+    developers:
+      - dev1
+      - dev2
+      - dev3
+  version: 1.0.0
+security:
+  - BasicAuth: []
+  - BearerAuth: []
+externalDocs:
+  url: https://dev.google.com
+  description: External Documentation
+servers:
+  - url: https://dev.google.com
+    description: This the development server
+  - url: https://prod.google.com
+    description: This the production server, don't use for testing
+  - url: https://{username}.server.com:{port}/{version}
+    variables:
+      username:
+        default: demo
+        #description: This value is assigned by the service provider
+      port:
+        enum:
+          - "8443"
+          - "443"
+        default: "8443"
+      version:
+        default: v1
+tags:
+  - name: Categories
+    description: These are category related operations
+  - name: Order
+    description: Order related operations
+paths:
+  /categories:
+    get:
+      security:
+        - BasicAuth: []
+      
+      operationId: getCategories
+      tags:
+        - Categories
+      summary: This will get all the categories
+      description: Fteches all the categories supported by EazyShop
+      parameters:
+        - $ref: "#/components/parameters/categoryIdQueryParam"
+      responses:
+        '200':
+          description: A list of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    categoryId:
+                      type: integer
+                    name:
+                      type: string
+
+
+
+  /categories/{categoryId}:
+    get:
+      security: []
+      deprecated: true
+      tags:
+        - Categories
+      parameters:
+        - $ref: "#/components/parameters/categoryIdQueryParam"
+
+  /orders:
+    post:
+      operationId: createOrder 
+      tags:
+        - Order
+      summary: create order
+      description: order endpoint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                products:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      productId:
+                        type: integer
+                      name:
+                        type: string
+                      price:
+                        type: number
+                      categoryName:
+                        type: string
+                      quantity:
+                        type: integer
+                        description: |
+                          # Item quantity
+                          **Quantity** represents the quantity of the item.
+                      address:
+                        $ref: "#/components/schemas/address"
+
+      responses:
+        '201':
+          summary: order created
+          description: This shows the order has been created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orderId:
+                    type: integer
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    categoryIdQueryParam:
+        name: categoryId
+        in: path
+        required: false
+        schema:
+          type: integer
+        description: This is the category Id
+  schemas:
+    address:
+      type: object
+      properties:
+        addressLine:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zipcode:
+          type: string
+        date:
+          type: string
+          format: date
+    product:
+      type: object
+      properties:
+        productId:
+          type: integer
+        name:
+          type: string
+        quantity:
+          type: integer
+    Mobile:
+      allOf:
+        - $ref: "#/components/schemas/product"
+        - type: object
+          properties:
+            networkType:
+              type: string
+              enum:
+                - 3G
+                - 4G
+                - 5G
+          required: [networkType]
+    Laptop:
+      allOf: 
+        - $ref: "#/components/schemas/product"
+        - type: object
+          properties:
+            ram:
+              type: string
+              enum:
+                - 8 GB
+                - 16 GB
+                - 32 GB
+
+        
