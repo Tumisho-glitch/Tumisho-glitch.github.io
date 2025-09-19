@@ -1,206 +1,3330 @@
-openapi: 3.0.3
-x-Dev-lifecuycle:
-  last-updated: today
+openapi: 3.0.1
 info:
-  title: "SnapTrack Documentation"
-  description: |
-    # About us
-    **Practice** **Eazy shop** is a website that I use to practice openAPI specification
-    You will get `Affiliate commission` for selling their products
-    ## The following categories are supported
-    - Mobile
-    - Web
-  #summary: "This is a practice document for learning openAPI. I am practicing openAPI. "
-  termsOfService: https://terms.google.com
-  contact:
-    name : Tumisho
-    url: https://tumisho.google.com
-    email: contact@gmail.com
-  license:
-    name: EazyShop license
-    url: https://license.google.com
-  x-custom-info:
-    comment: some comments
-    developers:
-      - dev1
-      - dev2
-      - dev3
-  version: 1.0.0
-security:
-  - BasicAuth: []
-  - BearerAuth: []
-externalDocs:
-  url: https://dev.google.com
-  description: External Documentation
+  title: OpenAPI definition
+  version: v0
 servers:
-  - url: https://dev.google.com
-    description: This the development server
-  - url: https://prod.google.com
-    description: This the production server, don't use for testing
-  - url: https://{username}.server.com:{port}/{version}
-    variables:
-      username:
-        default: demo
-        #description: This value is assigned by the service provider
-      port:
-        enum:
-          - "8443"
-          - "443"
-        default: "8443"
-      version:
-        default: v1
-tags:
-  - name: Categories
-    description: These are category related operations
-  - name: Order
-    description: Order related operations
+- url: http://localhost:8081
+  description: Generated server url
 paths:
-  /categories:
-    get:
-      security:
-        - BasicAuth: []
-      
-      operationId: getCategories
+  /api/staff/work-profile/update:
+    put:
       tags:
-        - Categories
-      summary: This will get all the categories
-      description: Fteches all the categories supported by EazyShop
-      parameters:
-        - $ref: "#/components/parameters/categoryIdQueryParam"
+      - staff-work-profile-controller
+      operationId: updateWorkProfile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StaffAvailability"
+        required: true
       responses:
-        '200':
-          description: A list of categories
+        "200":
+          description: OK
           content:
-            application/json:
+            '*/*':
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    categoryId:
-                      type: integer
-                    name:
-                      type: string
-
-
-
-  /categories/{categoryId}:
-    get:
-      security: []
-      deprecated: true
+                type: object
+  /api/staff/work-profile/timeOffs/add:
+    put:
       tags:
-        - Categories
+      - staff-work-profile-controller
+      operationId: updateTimeOff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StaffTimeOff"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/packages:
+    put:
+      tags:
+      - packages-controller
+      operationId: updatePackage
       parameters:
-        - $ref: "#/components/parameters/categoryIdQueryParam"
-
-  /orders:
+      - name: packageId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PackageUpdateRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
     post:
-      operationId: createOrder 
       tags:
-        - Order
-      summary: create order
-      description: order endpoint
+      - packages-controller
+      operationId: createPackage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePackageRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/packages/addons:
+    put:
+      tags:
+      - packages-controller
+      operationId: updatePackageAddon
+      parameters:
+      - name: addonId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PackageAddonUpdateRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - packages-controller
+      operationId: createPackageAddon
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAddonRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/invoices:
+    get:
+      tags:
+      - invoice-controller
+      operationId: getAllInvoices
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    put:
+      tags:
+      - invoice-controller
+      operationId: updateInvoice
+      parameters:
+      - name: invoiceId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomLineItemRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/equipment:
+    get:
+      tags:
+      - equipment-management-controller
+      operationId: getEquipment
+      parameters:
+      - name: equipmentID
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    put:
+      tags:
+      - equipment-management-controller
+      operationId: updateEquipment
+      parameters:
+      - name: equipmentId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEquipmentRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - equipment-management-controller
+      operationId: addEquipment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEquipmentRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/equipment/reserve:
+    put:
+      tags:
+      - equipment-management-controller
+      operationId: updateReserveEquipment
+      parameters:
+      - name: usageId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateEquipmentUsageRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - equipment-management-controller
+      operationId: reserveEquipment
+      parameters:
+      - name: equipmentId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/maintenance_check_in_out_request"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/equipment/maintenance:
+    get:
+      tags:
+      - equipment-management-controller
+      operationId: EquipmentMaintenanceInfo
+      parameters:
+      - name: equipmentId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    put:
+      tags:
+      - equipment-management-controller
+      operationId: updateScheduleMaintenance
+      parameters:
+      - name: maintenanceId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MaintenanceUpdateRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - equipment-management-controller
+      operationId: scheduleMaintenance
+      parameters:
+      - name: equipmentId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScheduleMaintenanceRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/bookings/update:
+    put:
+      tags:
+      - booking-management-controller
+      operationId: updateBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StaffUpdateBookingRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/photos/{id}:
+    put:
+      tags:
+      - photo-controller
+      operationId: updatePhoto
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PhotoUpdateDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+    delete:
+      tags:
+      - photo-controller
+      operationId: deletePhoto
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+  /api/photos/bulk-update:
+    put:
+      tags:
+      - photo-controller
+      operationId: bulkUpdatePhotos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkPhotoUpdateDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+  /api/client/bookings:
+    get:
+      tags:
+      - booking-management-controller
+      operationId: getClientBookings
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    put:
+      tags:
+      - booking-management-controller
+      operationId: updateClientBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBookingRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - booking-management-controller
+      operationId: createBooking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBookingRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - booking-management-controller
+      operationId: softDeleteBookingForClient
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/albums/{id}:
+    get:
+      tags:
+      - album-controller
+      operationId: getAlbumById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+    put:
+      tags:
+      - album-controller
+      operationId: updateAlbum
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              properties:
-                products:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      productId:
-                        type: integer
-                      name:
-                        type: string
-                      price:
-                        type: number
-                      categoryName:
-                        type: string
-                      quantity:
-                        type: integer
-                        description: |
-                          # Item quantity
-                          **Quantity** represents the quantity of the item.
-                      address:
-                        $ref: "#/components/schemas/address"
-
+              additionalProperties:
+                type: object
+        required: true
       responses:
-        '201':
-          summary: order created
-          description: This shows the order has been created
+        "200":
+          description: OK
           content:
-            application/json:
+            '*/*':
               schema:
                 type: object
-                properties:
-                  orderId:
-                    type: integer
-components:
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-  parameters:
-    categoryIdQueryParam:
-        name: categoryId
+                additionalProperties:
+                  type: object
+    delete:
+      tags:
+      - album-controller
+      operationId: deleteAlbum
+      parameters:
+      - name: id
         in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+  /api/webhooks/payments:
+    post:
+      tags:
+      - payment-controller
+      operationId: paymentWebhook
+      parameters:
+      - name: providerTransactionId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: amount
+        in: query
+        required: false
+        schema:
+          type: number
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/payments:
+    get:
+      tags:
+      - payment-controller
+      operationId: getAllPayments
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+      - payment-controller
+      operationId: createPayment
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: amount
+        in: query
+        required: true
+        schema:
+          type: number
+      - name: paymentMethod
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: paymentProvider
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: providerTransactionId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: notes
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/payments/refund:
+    post:
+      tags:
+      - payment-controller
+      operationId: processRefund
+      parameters:
+      - name: paymentId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: refundAmount
+        in: query
+        required: true
+        schema:
+          type: number
+      - name: refundReason
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/bookings:
+    post:
+      tags:
+      - booking-management-controller
+      operationId: createBookingAsStaff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Booking"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    delete:
+      tags:
+      - booking-management-controller
+      operationId: softDeleteBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/bookings/confirm:
+    post:
+      tags:
+      - booking-management-controller
+      operationId: confirmBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/bookings/assign-staff:
+    post:
+      tags:
+      - booking-management-controller
+      operationId: assignStaffToBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingStaffAssign"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/photos/{id}/approve:
+    post:
+      tags:
+      - photo-controller
+      operationId: approvePhoto
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+  /api/photos/upload:
+    post:
+      tags:
+      - photo-controller
+      operationId: uploadPhotos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+  /api/photos/batch-approve:
+    post:
+      tags:
+      - photo-controller
+      operationId: batchApprovePhotos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+  /api/invoices/pay/deposit:
+    post:
+      tags:
+      - invoice-controller
+      operationId: payInvoiceDeposit
+      parameters:
+      - name: invoiceId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/client/bookings/reschedule:
+    post:
+      tags:
+      - booking-management-controller
+      operationId: requestReschedule
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingReschedule"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/auth/verify-email:
+    post:
+      tags:
+      - authentication-controller
+      operationId: sendVerificationEmail
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/auth/reset-password:
+    post:
+      tags:
+      - authentication-controller
+      operationId: resetPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserResetPassword"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/auth/resend-verification:
+    post:
+      tags:
+      - authentication-controller
+      operationId: resendVerificationEmail
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/auth/register:
+    post:
+      tags:
+      - authentication-controller
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/auth/logout:
+    post:
+      tags:
+      - authentication-controller
+      operationId: logout
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/auth/login:
+    post:
+      tags:
+      - authentication-controller
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserLogin"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/albums:
+    get:
+      tags:
+      - album-controller
+      operationId: getAllAlbums
+      parameters:
+      - name: clientId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: photographerId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
         required: false
         schema:
           type: integer
-        description: This is the category Id
-  schemas:
-    address:
-      type: object
-      properties:
-        addressLine:
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+    post:
+      tags:
+      - album-controller
+      operationId: createAlbum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+  /api/staff/work-profile/timeOffs/reject:
+    patch:
+      tags:
+      - staff-work-profile-controller
+      operationId: rejectTimeOff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              format: uuid
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/work-profile/timeOffs/approve:
+    patch:
+      tags:
+      - staff-work-profile-controller
+      operationId: approveTimeOff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              format: uuid
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/update:
+    patch:
+      tags:
+      - staff-profile-controller
+      operationId: updateStaffProfile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StaffProfile"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/payments/status:
+    get:
+      tags:
+      - payment-controller
+      operationId: getPaymentsByStatus
+      parameters:
+      - name: status
+        in: query
+        required: true
+        schema:
           type: string
-        city:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    patch:
+      tags:
+      - payment-controller
+      operationId: updatePaymentStatus
+      parameters:
+      - name: paymentId
+        in: query
+        required: true
+        schema:
           type: string
-        state:
+          format: uuid
+      - name: status
+        in: query
+        required: true
+        schema:
           type: string
-        zipcode:
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/packages/{id}/enable:
+    patch:
+      tags:
+      - packages-controller
+      operationId: enablePackage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
           type: string
-        date:
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/packages/addons/{id}/enable:
+    patch:
+      tags:
+      - packages-controller
+      operationId: enablePackageAddon
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/equipment/checkout:
+    patch:
+      tags:
+      - equipment-management-controller
+      operationId: checkOutEquipment
+      parameters:
+      - name: equipmentID
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: bookingID
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckoutEquipmentRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/equipment/checkout/maintenance:
+    patch:
+      tags:
+      - equipment-management-controller
+      operationId: checkoutForMaintenance
+      parameters:
+      - name: equipmentID
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: maintenaceId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/maintenance_check_in_out_request"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/equipment/checkin:
+    patch:
+      tags:
+      - equipment-management-controller
+      operationId: checkInEquipment
+      parameters:
+      - name: usageID
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/checkinEquipmentRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/equipment/checkin/maintenance:
+    patch:
+      tags:
+      - equipment-management-controller
+      operationId: checkinForMaintenance
+      parameters:
+      - name: equipmentID
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: maintenaceId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/maintenance_check_in_out_request"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/client/update:
+    patch:
+      tags:
+      - user-profile-controller
+      operationId: updateProfile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientProfile"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/work-profile/timeOffs:
+    get:
+      tags:
+      - staff-work-profile-controller
+      operationId: getStaffTimeOffs
+      parameters:
+      - name: staffId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/work-profile/schedule:
+    get:
+      tags:
+      - staff-work-profile-controller
+      operationId: getUserStaffProfile
+      parameters:
+      - name: userID
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/payments/get:
+    get:
+      tags:
+      - payment-controller
+      operationId: getPaymentById
+      parameters:
+      - name: paymentId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/payments/client:
+    get:
+      tags:
+      - payment-controller
+      operationId: getPaymentsByClient
+      parameters:
+      - name: clientId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/me:
+    get:
+      tags:
+      - staff-profile-controller
+      operationId: getStaffProfile
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/invoices/get:
+    get:
+      tags:
+      - invoice-controller
+      operationId: getInvoiceById
+      parameters:
+      - name: invoiceId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/invoices/client:
+    get:
+      tags:
+      - invoice-controller
+      operationId: getInvoicesByClient
+      parameters:
+      - name: clientId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/invoices/booking:
+    get:
+      tags:
+      - invoice-controller
+      operationId: getInvoicesForBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/getAllEquipment:
+    get:
+      tags:
+      - equipment-management-controller
+      operationId: getAllEquipment
+      parameters:
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - AVAILABLE
+          - IN_MAINTENANCE
+          - OUT_OF_ORDER
+          - IN_USE
+          - REMOVED
+      - name: isAvailable
+        in: query
+        required: true
+        schema:
+          type: boolean
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/equipment/reservation:
+    get:
+      tags:
+      - equipment-management-controller
+      operationId: getReservationByEquipmentId
+      parameters:
+      - name: equipmentId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/equipment/reservation/booking:
+    get:
+      tags:
+      - equipment-management-controller
+      operationId: getReservationsByBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/equipment/maintenance/get:
+    get:
+      tags:
+      - equipment-management-controller
+      operationId: getMaintenanceRecordById
+      parameters:
+      - name: maintenanceId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/equipment/history:
+    get:
+      tags:
+      - equipment-management-controller
+      operationId: history
+      parameters:
+      - name: equipmentID
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/equipment/get:
+    get:
+      tags:
+      - equipment-management-controller
+      operationId: getReservationByEquipmentId_1
+      parameters:
+      - name: startDate
+        in: query
+        required: true
+        schema:
           type: string
           format: date
-    product:
+      - name: endDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/bookings/payments:
+    get:
+      tags:
+      - payment-controller
+      operationId: getPaymentsByBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/bookings/payments/total:
+    get:
+      tags:
+      - payment-controller
+      operationId: getTotalPaidByBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/bookings/payments/successful:
+    get:
+      tags:
+      - payment-controller
+      operationId: getSuccessfulPaymentsByBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/bookings/payments/refundable:
+    get:
+      tags:
+      - payment-controller
+      operationId: getRefundablePaymentsByBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff-member/getDayAvailability:
+    get:
+      tags:
+      - booking-management-controller
+      operationId: getPhotographerAvailableTimesForDay
+      parameters:
+      - name: userId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/photos:
+    get:
+      tags:
+      - photo-controller
+      operationId: getAllPhotos
+      parameters:
+      - name: albumId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: bookingId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 1
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 50
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+  /api/packages:
+    get:
+      tags:
+      - packages-controller
+      operationId: getAllPackages
+      parameters:
+      - name: isActive
+        in: query
+        required: true
+        schema:
+          type: boolean
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/packages/{id}:
+    get:
+      tags:
+      - packages-controller
+      operationId: getPackageById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/package/availability:
+    get:
+      tags:
+      - packages-controller
+      operationId: getPackageAvailability
+      parameters:
+      - name: packageId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/package-addons/universal:
+    get:
+      tags:
+      - packages-controller
+      operationId: getUniversalAddons
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/package-addons/available:
+    get:
+      tags:
+      - packages-controller
+      operationId: getAvailableAddonsForPackage
+      parameters:
+      - name: packageId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/invoices:
+    get:
+      tags:
+      - invoice-controller
+      operationId: getMyInvoices
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/client/payments:
+    get:
+      tags:
+      - payment-controller
+      operationId: getPayment
+      parameters:
+      - name: paymentId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/client/payments/my:
+    get:
+      tags:
+      - payment-controller
+      operationId: getMyPayments
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/client/me:
+    get:
+      tags:
+      - user-profile-controller
+      operationId: getClientProfile
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/client/invoices/get:
+    get:
+      tags:
+      - invoice-controller
+      operationId: getMyInvoiceById
+      parameters:
+      - name: invoiceId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/client/invoices/booking:
+    get:
+      tags:
+      - invoice-controller
+      operationId: getInvoicesForMyBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/client/bookings/payments:
+    get:
+      tags:
+      - payment-controller
+      operationId: getPaymentsForBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/client/bookings/payments/total:
+    get:
+      tags:
+      - payment-controller
+      operationId: getTotalPaidForBooking
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/bookings:
+    get:
+      tags:
+      - booking-management-controller
+      operationId: getAllBookings
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/bookings/get:
+    get:
+      tags:
+      - booking-management-controller
+      operationId: getBookingById
+      parameters:
+      - name: bookingId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/auth/verifyAccount:
+    get:
+      tags:
+      - authentication-controller
+      operationId: verifyAccount
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: code
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/auth/me:
+    get:
+      tags:
+      - authentication-controller
+      operationId: getCurrentUser
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/auth/forgot-password:
+    get:
+      tags:
+      - authentication-controller
+      operationId: sendRecoveryMail
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/addons:
+    get:
+      tags:
+      - packages-controller
+      operationId: getPackageAddons
+      parameters:
+      - name: packageId
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: isRequired
+        in: query
+        required: true
+        schema:
+          type: boolean
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/addons/all:
+    get:
+      tags:
+      - packages-controller
+      operationId: getAllAddons
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/work-profile/timeOffs/delete:
+    delete:
+      tags:
+      - staff-work-profile-controller
+      operationId: deleteTimeOff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              format: uuid
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/packages/{id}:
+    delete:
+      tags:
+      - packages-controller
+      operationId: disablePackage
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/staff/packages/addons/{id}:
+    delete:
+      tags:
+      - packages-controller
+      operationId: disablePackageAddon
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/photos/bulk-delete:
+    delete:
+      tags:
+      - photo-controller
+      operationId: bulkDeletePhotos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+components:
+  schemas:
+    LocalTime:
       type: object
       properties:
-        productId:
+        hour:
           type: integer
+          format: int32
+        minute:
+          type: integer
+          format: int32
+        second:
+          type: integer
+          format: int32
+        nano:
+          type: integer
+          format: int32
+    StaffAvailability:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user:
+          $ref: "#/components/schemas/User"
+        dayOfWeek:
+          type: string
+          enum:
+          - MONDAY
+          - TUESDAY
+          - WEDNESDAY
+          - THURSDAY
+          - FRIDAY
+          - SATURDAY
+          - SUNDAY
+        startTime:
+          $ref: "#/components/schemas/LocalTime"
+        endTime:
+          $ref: "#/components/schemas/LocalTime"
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    User:
+      required:
+      - email
+      - firstName
+      - lastName
+      - passwordHash
+      - phone
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          pattern: "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$"
+          type: string
+        passwordHash:
+          type: string
+        role:
+          type: string
+          enum:
+          - CLIENT
+          - MANAGER
+          - PHOTOGRAPHER
+          - ASSISTANT
+        verification_status:
+          type: string
+          enum:
+          - VERIFIED
+          - UNVERIFIED
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        activity:
+          type: string
+          enum:
+          - ACTIVE
+          - DEACTIVATED
+        userType:
+          type: string
+          enum:
+          - CLIENT
+          - STAFF
+    StaffTimeOff:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user:
+          $ref: "#/components/schemas/User"
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        type:
+          type: string
+          enum:
+          - VACATION
+          - SICK
+          - PERSONAL
+          - EMERGENCY
+          - BEREAVEMENT
+          - MATERNITY
+          - PATERNITY
+          - TRAINING
+          - OTHER
+        reason:
+          type: string
+        status:
+          type: string
+          enum:
+          - PENDING
+          - APPROVED
+          - REJECTED
+        isPartialDay:
+          type: boolean
+        partialDayStart:
+          $ref: "#/components/schemas/LocalTime"
+        partialDayEnd:
+          $ref: "#/components/schemas/LocalTime"
+        approvedBy:
+          $ref: "#/components/schemas/User"
+        approvedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    EquipmentInfo:
+      type: object
+      properties:
+        equipmentId:
+          type: string
+          format: uuid
+        required:
+          type: boolean
+    PackageUpdateRequest:
+      required:
+      - packageType
+      type: object
+      properties:
         name:
           type: string
+        description:
+          type: string
+        basePrice:
+          type: number
+        durationHours:
+          type: integer
+          format: int32
+        maxLocations:
+          type: integer
+          format: int32
+        includedPhotos:
+          type: integer
+          format: int32
+        editedPhotos:
+          type: integer
+          format: int32
+        outfitChanges:
+          type: integer
+          format: int32
+        packageType:
+          type: string
+          enum:
+          - flat
+          - compact
+        categories:
+          type: array
+          items:
+            type: string
+        photographers:
+          type: array
+          items:
+            type: string
+            format: uuid
+        equipments:
+          type: array
+          items:
+            $ref: "#/components/schemas/EquipmentInfo"
+        isActive:
+          type: boolean
+        mainImage:
+          type: string
+        imageUrls:
+          type: array
+          items:
+            type: string
+    PackageAddonUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        isActive:
+          type: boolean
+        isRequired:
+          type: boolean
+        addonType:
+          type: string
+          enum:
+          - duration
+          - other
+          - compact
+        equipments:
+          type: array
+          items:
+            $ref: "#/components/schemas/EquipmentInfo"
+    CustomLineItemRequest:
+      type: object
+      properties:
+        description:
+          type: string
+        price:
+          type: number
+    CreateEquipmentRequest:
+      required:
+      - name
+      - serialNumber
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - AVAILABLE
+          - IN_MAINTENANCE
+          - OUT_OF_ORDER
+          - IN_USE
+          - REMOVED
+        category:
+          type: string
+        model:
+          type: string
+        name:
+          type: string
+        brand:
+          type: string
+        serialNumber:
+          type: string
+        purchaseDate:
+          type: string
+          format: date
+        purchasePrice:
+          type: number
+        current_value:
+          type: number
+        location:
+          type: string
+        qrCode:
+          type: string
+        maintenanceIntervalDays:
+          type: integer
+          format: int32
+        lastMaintenanceDate:
+          type: string
+          format: date
+        notes:
+          type: string
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+        mainImage:
+          type: string
+        imageUrls:
+          type: array
+          items:
+            type: string
+        specifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/EquipmentSpecification"
+    Equipment:
+      required:
+      - name
+      - serialNumber
+      type: object
+      properties:
+        equipmentId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+          - AVAILABLE
+          - IN_MAINTENANCE
+          - OUT_OF_ORDER
+          - IN_USE
+          - REMOVED
+        category:
+          $ref: "#/components/schemas/EquipmentCategory"
+        model:
+          type: string
+        name:
+          type: string
+        brand:
+          type: string
+        serialNumber:
+          type: string
+        purchaseDate:
+          type: string
+          format: date
+        purchasePrice:
+          type: number
+        current_value:
+          type: number
+        location:
+          type: string
+        qrCode:
+          type: string
+        maintenanceIntervalDays:
+          type: integer
+          format: int32
+        lastMaintenanceDate:
+          type: string
+          format: date
+        notes:
+          type: string
+        mainImage:
+          type: string
+        specifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/EquipmentSpecification"
+        imageUrls:
+          type: array
+          items:
+            type: string
+        created_at:
+          type: string
+          format: date
+        updated_at:
+          type: string
+          format: date
+        available:
+          type: boolean
+    EquipmentCategory:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        category:
+          type: string
+    EquipmentSpecification:
+      type: object
+      properties:
+        specId:
+          type: string
+          format: uuid
+        equipment:
+          $ref: "#/components/schemas/Equipment"
+        key:
+          type: string
+        value:
+          type: string
+    updateEquipmentUsageRequest:
+      required:
+      - bookingId
+      - equipmentId
+      type: object
+      properties:
+        equipmentId:
+          type: string
+          format: uuid
+        bookingId:
+          type: string
+          format: uuid
+    MaintenanceUpdateRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - PREVENTIVE
+          - ROUTINE_SERVICE
+          - REPAIR
+          - INSPECTION
+          - CALIBRATION
+          - FIRMWARE_UPDATE
+          - CLEANING
+          - WARRANTY_SERVICE
+          - EMERGENCY_REPAIR
+        scheduledDate:
+          type: string
+          format: date
+        provider:
+          type: string
+        estimatedCost:
+          type: number
+        notes:
+          type: string
+        equipmentId:
+          type: string
+          format: uuid
+        completedDate:
+          type: string
+          format: date
+        actualCost:
+          type: number
+    AddonCreateBooking:
+      type: object
+      properties:
+        addonId:
+          type: string
+          format: uuid
         quantity:
           type: integer
-    Mobile:
-      allOf:
-        - $ref: "#/components/schemas/product"
-        - type: object
-          properties:
-            networkType:
-              type: string
-              enum:
-                - 3G
-                - 4G
-                - 5G
-          required: [networkType]
-    Laptop:
-      allOf: 
-        - $ref: "#/components/schemas/product"
-        - type: object
-          properties:
-            ram:
-              type: string
-              enum:
-                - 8 GB
-                - 16 GB
-                - 32 GB
-
-        
+          format: int32
+    StaffUpdateBookingRequest:
+      required:
+      - bookingStatus
+      - locationAddress
+      - packageId
+      - scheduledDate
+      - scheduledTime
+      type: object
+      properties:
+        packageId:
+          type: string
+          format: uuid
+        scheduledDate:
+          type: string
+          format: date
+        scheduledTime:
+          $ref: "#/components/schemas/LocalTime"
+        durationHours:
+          type: integer
+          format: int32
+        locationAddress:
+          type: string
+        locationLat:
+          type: number
+        locationLng:
+          type: number
+        specialRequests:
+          type: string
+        internalNotes:
+          type: string
+        photographers:
+          type: array
+          items:
+            type: string
+            format: uuid
+        assistants:
+          type: array
+          items:
+            type: string
+            format: uuid
+        addons:
+          type: array
+          items:
+            $ref: "#/components/schemas/AddonCreateBooking"
+        referencePhotos:
+          type: array
+          items:
+            type: string
+        bookingStatus:
+          type: string
+          enum:
+          - PENDING
+          - SCHEDULED
+          - CONFIRMED
+          - CANCELLED
+          - COMPLETED
+    PhotoUpdateDto:
+      type: object
+      properties:
+        isClientFavorite:
+          type: boolean
+        isPhotographerPick:
+          type: boolean
+        editStatus:
+          type: string
+          enum:
+          - RAW
+          - EDITED
+          - APPROVED
+    BulkPhotoUpdateDto:
+      type: object
+      properties:
+        photoIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        updates:
+          $ref: "#/components/schemas/UpdateData"
+    UpdateData:
+      type: object
+      properties:
+        editStatus:
+          type: string
+          enum:
+          - RAW
+          - EDITED
+          - APPROVED
+        isPhotographerPick:
+          type: boolean
+    CreateBookingRequest:
+      required:
+      - locationAddress
+      - packageId
+      - scheduledDate
+      - scheduledTime
+      type: object
+      properties:
+        packageId:
+          type: string
+          format: uuid
+        scheduledDate:
+          type: string
+          format: date
+        scheduledTime:
+          $ref: "#/components/schemas/LocalTime"
+        durationHours:
+          type: integer
+          format: int32
+        locationAddress:
+          type: string
+        locationLat:
+          type: number
+        locationLng:
+          type: number
+        specialRequests:
+          type: string
+        internalNotes:
+          type: string
+        photographerId:
+          type: string
+          format: uuid
+        assistantId:
+          type: string
+          format: uuid
+        addons:
+          type: array
+          items:
+            $ref: "#/components/schemas/AddonCreateBooking"
+        referencePhotos:
+          type: array
+          items:
+            type: string
+    CreatePackageRequest:
+      required:
+      - basePrice
+      - categories
+      - description
+      - durationHours
+      - editedPhotos
+      - includedPhotos
+      - maxLocations
+      - name
+      - outfitChanges
+      - packageType
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        basePrice:
+          type: number
+        durationHours:
+          type: integer
+          format: int32
+        maxLocations:
+          type: integer
+          format: int32
+        includedPhotos:
+          type: integer
+          format: int32
+        editedPhotos:
+          type: integer
+          format: int32
+        outfitChanges:
+          type: integer
+          format: int32
+        packageType:
+          type: string
+          enum:
+          - flat
+          - compact
+        categories:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          items:
+            maxLength: 2147483647
+            minLength: 1
+            type: string
+        equipments:
+          type: array
+          items:
+            $ref: "#/components/schemas/EquipmentInfo"
+        mainImage:
+          type: string
+        imageUrls:
+          type: array
+          items:
+            type: string
+        photographers:
+          type: array
+          items:
+            type: string
+            format: uuid
+    CreateAddonRequest:
+      required:
+      - name
+      - price
+      type: object
+      properties:
+        packageId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        addonType:
+          type: string
+          enum:
+          - duration
+          - other
+          - compact
+        isActive:
+          type: boolean
+        equipments:
+          type: array
+          items:
+            $ref: "#/components/schemas/EquipmentInfo"
+        isRequired:
+          type: boolean
+    maintenance_check_in_out_request:
+      type: object
+      properties:
+        notes:
+          type: string
+    ScheduleMaintenanceRequest:
+      required:
+      - estimatedCost
+      - provider
+      - scheduledDate
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - PREVENTIVE
+          - ROUTINE_SERVICE
+          - REPAIR
+          - INSPECTION
+          - CALIBRATION
+          - FIRMWARE_UPDATE
+          - CLEANING
+          - WARRANTY_SERVICE
+          - EMERGENCY_REPAIR
+        scheduledDate:
+          type: string
+          format: date
+        provider:
+          type: string
+        estimatedCost:
+          type: number
+        notes:
+          type: string
+    Booking:
+      required:
+      - paymentStatus
+      - photographyPackage
+      - scheduledDate
+      - scheduledStartTime
+      - status
+      type: object
+      properties:
+        bookingId:
+          type: string
+          format: uuid
+        bookingName:
+          type: string
+        client:
+          $ref: "#/components/schemas/User"
+        photographyPackage:
+          $ref: "#/components/schemas/Package"
+        scheduledDate:
+          type: string
+          format: date
+        scheduledStartTime:
+          $ref: "#/components/schemas/LocalTime"
+        scheduledEndTime:
+          $ref: "#/components/schemas/LocalTime"
+        status:
+          type: string
+          enum:
+          - PENDING
+          - SCHEDULED
+          - CONFIRMED
+          - CANCELLED
+          - COMPLETED
+        paymentStatus:
+          type: string
+          enum:
+          - UNPAID
+          - PAID
+          - PARTIALLY_PAID
+          - REFUNDED
+        durationHours:
+          type: integer
+          format: int32
+        locationAddress:
+          type: string
+        locationLat:
+          type: number
+        locationLng:
+          type: number
+        specialRequests:
+          type: string
+        internalNotes:
+          type: string
+        totalAmount:
+          minimum: 0.0
+          exclusiveMinimum: false
+          type: number
+        depositAmount:
+          minimum: 0.0
+          exclusiveMinimum: false
+          type: number
+        isRescheduled:
+          type: boolean
+        rescheduleStatus:
+          type: string
+          enum:
+          - NOT_RESCHEDULED
+          - REQUESTED
+          - APPROVED
+          - DECLINED
+        photographers:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingStaff"
+        assistants:
+          type: array
+          items:
+            $ref: "#/components/schemas/BookingStaff"
+        referencePhotos:
+          type: array
+          items:
+            type: string
+        createdBy:
+          $ref: "#/components/schemas/User"
+        approvedBy:
+          $ref: "#/components/schemas/User"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        approvedAt:
+          type: string
+          format: date-time
+    BookingStaff:
+      required:
+      - staff
+      - staffRole
+      type: object
+      properties:
+        staff:
+          $ref: "#/components/schemas/User"
+        staffRole:
+          type: string
+          enum:
+          - PHOTOGRAPHER
+          - ASSISTANT
+          - SECOND_PHOTOGRAPHER
+          - LIGHTING_ASSISTANT
+          - COORDINATOR
+          - MAKEUP_ARTIST
+          - VIDEOGRAPHER
+    Package:
+      required:
+      - basePrice
+      - categories
+      - description
+      - durationHours
+      - editedPhotos
+      - includedPhotos
+      - name
+      - outfitChanges
+      type: object
+      properties:
+        packageId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        basePrice:
+          type: number
+        durationHours:
+          type: integer
+          format: int32
+        maxLocations:
+          type: integer
+          format: int32
+        includedPhotos:
+          type: integer
+          format: int32
+        editedPhotos:
+          type: integer
+          format: int32
+        outfitChanges:
+          type: integer
+          format: int32
+        packageType:
+          type: string
+          enum:
+          - flat
+          - compact
+        categories:
+          type: array
+          items:
+            type: string
+        mainImage:
+          type: string
+        imageUrls:
+          type: array
+          items:
+            type: string
+        packageEquipmentList:
+          type: array
+          items:
+            $ref: "#/components/schemas/PackageEquipment"
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        Photographers:
+          type: array
+          items:
+            $ref: "#/components/schemas/PhotographersDTO"
+    PackageEquipment:
+      type: object
+      properties:
+        packageEquipmentId:
+          type: string
+          format: uuid
+        packageEntity:
+          $ref: "#/components/schemas/Package"
+        equipment:
+          $ref: "#/components/schemas/Equipment"
+        quantity:
+          type: integer
+          format: int32
+        required:
+          type: boolean
+    PhotographersDTO:
+      type: object
+      properties:
+        photographerId:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+    BookingStaffAssign:
+      required:
+      - staffId
+      - staffRole
+      type: object
+      properties:
+        staffId:
+          type: string
+          format: uuid
+        staffRole:
+          type: string
+          enum:
+          - PHOTOGRAPHER
+          - ASSISTANT
+          - SECOND_PHOTOGRAPHER
+          - LIGHTING_ASSISTANT
+          - COORDINATOR
+          - MAKEUP_ARTIST
+          - VIDEOGRAPHER
+    BookingReschedule:
+      required:
+      - newDate
+      - newTime
+      - reason
+      type: object
+      properties:
+        newDate:
+          type: string
+          format: date
+        newTime:
+          $ref: "#/components/schemas/LocalTime"
+        reason:
+          type: string
+        approved:
+          type: boolean
+        responseNotes:
+          type: string
+    UserResetPassword:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        code:
+          type: integer
+          format: int32
+    UserLogin:
+      required:
+      - email
+      - passwordHash
+      type: object
+      properties:
+        email:
+          type: string
+        passwordHash:
+          type: string
+    StaffProfile:
+      type: object
+      properties:
+        profileId:
+          type: string
+          format: uuid
+        user:
+          $ref: "#/components/schemas/User"
+        employeeId:
+          type: string
+        hireDate:
+          type: string
+          format: date
+        hourlyRate:
+          type: number
+        specializations:
+          type: array
+          items:
+            type: string
+        availabilitySchedule:
+          type: string
+        emergencyContactName:
+          type: string
+        emergencyContactPhone:
+          type: string
+        isActive:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CheckoutEquipmentRequest:
+      type: object
+      properties:
+        notes:
+          type: string
+        condition:
+          type: string
+          enum:
+          - GOOD
+          - EXCELLENT
+          - POOR
+          - FAIR
+    checkinEquipmentRequest:
+      type: object
+      properties:
+        notes:
+          type: string
+        condition:
+          type: string
+          enum:
+          - GOOD
+          - EXCELLENT
+          - POOR
+          - FAIR
+    ClientProfile:
+      type: object
+      properties:
+        profileId:
+          type: string
+          format: uuid
+        user:
+          $ref: "#/components/schemas/User"
+        dateOfBirth:
+          type: string
+          format: date
+        anniversaryDate:
+          type: string
+          format: date
+        preferredPhotographer:
+          $ref: "#/components/schemas/User"
+        marketingOptIn:
+          type: boolean
+        referralSource:
+          type: string
+        notes:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            type: string
